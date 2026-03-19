@@ -83,44 +83,12 @@ messageTemplate.innerHTML = `
       font-size: 0.94rem;
     }
 
-    .eth-recipient {
-      margin-top: 0.7rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.94rem;
-    }
-
-    .eth-recipient label {
-      color: #334155;
-      white-space: nowrap;
-    }
-
-    .eth-recipient select {
-      flex: 1;
-      min-width: 0;
-      padding: 0.45rem 0.55rem;
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
-      font: inherit;
-      font-size: 0.88rem;
-      background: #fff;
-    }
   </style>
 
   <section>
     <h2>Write Message On-Chain</h2>
     <p id="modeText" class="mode"></p>
     <textarea id="messageInput" placeholder="Type your message here..."></textarea>
-    <div id="ethRecipient" class="eth-recipient" hidden>
-      <label for="ethRecipientSelect">Recipient:</label>
-      <select id="ethRecipientSelect">
-        <option value="self">My address</option>
-        <option value="0x0">0x0 (null address)</option>
-        <option value="0x1">0x1</option>
-        <option value="0xdead">0xdead (burn address)</option>
-      </select>
-    </div>
     <div class="actions">
       <button type="button" id="sendEthBtn">Send via Ethereum</button>
       <button type="button" id="sendAdaBtn" class="cardano">Send via Cardano (CIP-20)</button>
@@ -133,8 +101,6 @@ messageTemplate.innerHTML = `
 const encoder = new TextEncoder();
 const ETH_MAINNET_CHAIN_ID = "0x1";
 const ETH_SEPOLIA_CHAIN_ID = "0xaa36a7";
-const ETH_NULL_ADDRESS = "0x0000000000000000000000000000000000000000";
-const ETH_ONE_ADDRESS = "0x0000000000000000000000000000000000000001";
 const ETH_DEAD_ADDRESS = "0x000000000000000000000000000000000000dEaD";
 
 function getExplorerUrl(chain, networkMode, txHash) {
@@ -198,9 +164,6 @@ class MessageSender extends HTMLElement {
     this.txOut = this.shadowRoot.getElementById("txOut");
     this.errorText = this.shadowRoot.getElementById("errorText");
     this.modeText = this.shadowRoot.getElementById("modeText");
-    this.ethRecipient = this.shadowRoot.getElementById("ethRecipient");
-    this.ethRecipientSelect = this.shadowRoot.getElementById("ethRecipientSelect");
-
     this.sendEthBtn.addEventListener("click", () => this.sendEthereum());
     this.sendAdaBtn.addEventListener("click", () => this.sendCardano());
     window.addEventListener("wallet-state-changed", this.onWalletStateChanged);
@@ -213,24 +176,8 @@ class MessageSender extends HTMLElement {
   }
 
   syncButtons() {
-    const ethConnected = walletState.ethereum.connected;
-    this.sendEthBtn.disabled = !ethConnected;
+    this.sendEthBtn.disabled = !walletState.ethereum.connected;
     this.sendAdaBtn.disabled = !walletState.cardano.connected;
-    this.ethRecipient.hidden = !ethConnected;
-  }
-
-  getEthRecipientAddress() {
-    const value = this.ethRecipientSelect.value;
-    if (value === "self") {
-      return walletState.ethereum.address;
-    }
-    if (value === "0x1") {
-      return ETH_ONE_ADDRESS;
-    }
-    if (value === "0xdead") {
-      return ETH_DEAD_ADDRESS;
-    }
-    return ETH_NULL_ADDRESS;
   }
 
   getExpectedNetworks() {
@@ -319,7 +266,7 @@ class MessageSender extends HTMLElement {
         );
       }
 
-      const to = this.getEthRecipientAddress();
+      const to = ETH_DEAD_ADDRESS;
       const data = `0x${utf8ToHex(message)}`;
       const txHash = await window.ethereum.request({
         method: "eth_sendTransaction",
