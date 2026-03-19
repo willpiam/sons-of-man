@@ -6,11 +6,11 @@ cardanoTemplate.innerHTML = `
   <style>
     :host {
       display: block;
-      border: 1px solid #dbe3ff;
-      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
       padding: 1rem;
       background: #ffffff;
-      box-shadow: 0 8px 24px rgba(17, 24, 39, 0.06);
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.05);
     }
 
     h2 {
@@ -26,12 +26,12 @@ cardanoTemplate.innerHTML = `
     }
 
     button {
-      border: 1px solid #c7d2fe;
+      border: 1px solid #cbd5e1;
       border-radius: 10px;
       padding: 0.55rem 0.9rem;
       font: inherit;
-      background: #eef2ff;
-      color: #312e81;
+      background: #f8fafc;
+      color: #0f172a;
       cursor: pointer;
     }
 
@@ -45,7 +45,7 @@ cardanoTemplate.innerHTML = `
       margin-top: 0.85rem;
       padding: 0.65rem;
       border-radius: 8px;
-      background: #f6f7ff;
+      background: #f8fafc;
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       overflow-wrap: anywhere;
     }

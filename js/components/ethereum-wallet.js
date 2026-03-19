@@ -5,11 +5,11 @@ ethTemplate.innerHTML = `
   <style>
     :host {
       display: block;
-      border: 1px solid #dbe3ff;
-      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
       padding: 1rem;
       background: #ffffff;
-      box-shadow: 0 8px 24px rgba(17, 24, 39, 0.06);
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.05);
     }
 
     h2 {
@@ -23,7 +23,7 @@ ethTemplate.innerHTML = `
       padding: 0.6rem 0.9rem;
       font: inherit;
       color: #ffffff;
-      background: #4f46e5;
+      background: #4338ca;
       cursor: pointer;
     }
 
@@ -37,7 +37,7 @@ ethTemplate.innerHTML = `
       margin-top: 0.85rem;
       padding: 0.65rem;
       border-radius: 8px;
-      background: #f6f7ff;
+      background: #f8fafc;
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       overflow-wrap: anywhere;
     }

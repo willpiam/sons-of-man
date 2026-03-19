@@ -1,5 +1,4 @@
 :root {
-  color-scheme: light dark;
   font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
@@ -12,6 +11,6 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: linear-gradient(180deg, #f5f7ff 0%, #eef2ff 100%);
+  background: #f8fafc;
   color: #1f2937;
 }

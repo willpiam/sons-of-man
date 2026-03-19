@@ -1,6 +1,11 @@
+function getInitialNetworkMode() {
+  const params = new URLSearchParams(window.location.search);
+  return params.has("devnet") ? "devnet" : "mainnet";
+}
+
 export const walletState = {
   app: {
-    networkMode: "mainnet",
+    networkMode: getInitialNetworkMode(),
   },
   ethereum: {
     connected: false,
@@ -24,11 +29,4 @@ export function updateWalletState(chain, nextState) {
       detail: { chain, state: walletState[chain] },
     }),
   );
-}
-
-export function setNetworkMode(mode) {
-  if (mode !== "mainnet" && mode !== "devnet") {
-    throw new Error(`Unsupported network mode: ${mode}`);
-  }
-  updateWalletState("app", { networkMode: mode });
 }
