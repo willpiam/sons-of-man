@@ -25,6 +25,13 @@ Start a local server and navigate to `index.html`. The easiest way to do this is
 
 Attach `?devnet` to the end of your URL to connect only to devnets. Sepolia in the place of Ethereum, and Preview in the place of Cardano. 
 
+## Style
+
+Here are some ideas for the style I want to go for.
+
+- [ceremony.ethereum.org](https://ceremony.ethereum.org/)
+
+
 ## The oath
 
 ### Candidate 1
