@@ -8,7 +8,7 @@ function getConfiguredBaseUrl() {
   ) {
     return "http://localhost:3000/api";
   }
-  return "https://sons-of-man-api.onrender.com/api";
+  return "https://sons-of-man.onrender.com/api";
 }
 
 const API_BASE_URL = getConfiguredBaseUrl();
