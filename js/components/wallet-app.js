@@ -1,6 +1,7 @@
 import "./ethereum-wallet.js";
 import "./cardano-wallet.js";
 import "./oath-signer.js";
+import { createOathEvent } from "../lib/api.js";
 import { walletState } from "../lib/wallet-state.js";
 
 const appTemplate = document.createElement("template");
@@ -74,6 +75,13 @@ appTemplate.innerHTML = `
       gap: 0.7rem;
     }
 
+    .nameField {
+      display: grid;
+      gap: 0.35rem;
+      width: min(100%, 32rem);
+      justify-self: start;
+    }
+
     .row {
       display: flex;
       flex-wrap: wrap;
@@ -144,12 +152,18 @@ appTemplate.innerHTML = `
     a {
       color: #1d4ed8;
     }
+
+    .topLinks {
+      margin-top: 0.35rem;
+      margin-bottom: 0.75rem;
+    }
   </style>
 
   <article class="card">
     <div id="devnetBadge" class="devnetBadge" hidden>Devnet Mode</div>
     <h1>Sons of Man Digital Oath</h1>
     <p>Read the oath, sign a commitment on-chain, and share your public proof.</p>
+    <p class="topLinks"><a id="logLink" href="./log.html">View Oath Log</a></p>
     <p id="stepTag" class="stepTag"></p>
     <section id="stepContent"></section>
     <p id="errorText" class="error" hidden></p>
@@ -186,6 +200,7 @@ class WalletApp extends HTMLElement {
 
     window.addEventListener("wallet-state-changed", this.onWalletStateChanged);
     this.renderDevnetBadge();
+    this.shadowRoot.getElementById("logLink").href = "./log.html" + window.location.search;
     this.loadOath();
   }
 
@@ -270,7 +285,7 @@ class WalletApp extends HTMLElement {
           <input id="readCheck" type="checkbox" ${this.hasRead ? "checked" : ""} />
           <span>I have read this oath and choose to continue.</span>
         </label>
-        <label>
+        <label class="nameField">
           <span>Your name</span>
           <input id="nameInput" type="text" maxlength="120" value="${this.escapeHtml(this.signerName)}" placeholder="Type your full name" />
         </label>
@@ -379,6 +394,7 @@ class WalletApp extends HTMLElement {
         <a href="https://twitter.com/intent/tweet?text=${shareText}" target="_blank" rel="noopener noreferrer">Share on X</a>
         <a href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" rel="noopener noreferrer">Share on Facebook</a>
         <a href="https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}" target="_blank" rel="noopener noreferrer">Share on LinkedIn</a>
+        <a href="./log.html${window.location.search}">View Oath Log</a>
       </div>
       <div class="row" style="margin-top: 0.8rem;">
         <button id="copyTxBtn" class="secondary" type="button">Copy Tx Link</button>
@@ -413,12 +429,30 @@ class WalletApp extends HTMLElement {
         signerName: this.signerName,
       });
       this.signResult = result;
+      this.submitSignedEvent(result);
       this.isSigning = false;
       this.setStep(5);
     } catch (error) {
       this.isSigning = false;
       this.showError(error?.message || "Failed to sign and submit transaction.");
       this.setStep(3);
+    }
+  }
+
+  async submitSignedEvent(result) {
+    const walletAddress =
+      this.selectedChain === "ethereum" ? walletState.ethereum.address : walletState.cardano.address;
+    try {
+      await createOathEvent({
+        signer_name: this.signerName,
+        chain: result.chain,
+        tx_hash: result.txHash,
+        wallet_address: walletAddress || null,
+        network_mode: walletState.app.networkMode,
+        explorer_url: result.explorerUrl || null,
+      });
+    } catch (_error) {
+      // Intentionally ignore API failures: ceremony completion should not be blocked.
     }
   }
 
