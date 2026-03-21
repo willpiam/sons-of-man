@@ -5,38 +5,38 @@ oathLogTemplate.innerHTML = `
   <style>
     :host {
       display: block;
-      max-width: 980px;
+      max-width: 1060px;
       margin: 0 auto;
       padding: 1.5rem 1rem 2.5rem;
       font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
     .card {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 1.1rem;
-      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+      background: var(--som-panel, #11162a);
+      border: 1px solid var(--som-border, rgba(245, 158, 11, 0.22));
+      border-radius: 14px;
+      padding: 1.4rem 1.3rem;
+      box-shadow: var(--som-shadow, 0 20px 40px rgba(0, 0, 0, 0.35));
     }
 
     h1 {
       margin: 0;
-      color: #0f172a;
+      color: #fef3c7;
       font-size: clamp(1.4rem, 3vw, 1.9rem);
     }
 
     p {
-      color: #334155;
+      color: var(--som-text, #e5e7eb);
       margin: 0.45rem 0;
       line-height: 1.5;
     }
 
     a {
-      color: #1d4ed8;
+      color: var(--som-accent-strong, #fbbf24);
     }
 
     .error {
-      color: #b91c1c;
+      color: #f87171;
       margin-top: 0.7rem;
     }
 
@@ -48,39 +48,40 @@ oathLogTemplate.innerHTML = `
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 780px;
+      min-width: 700px;
     }
 
     th,
     td {
-      padding: 0.6rem;
-      border-bottom: 1px solid #e2e8f0;
+      padding: 0.6rem 0.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
       text-align: left;
       vertical-align: top;
-      color: #0f172a;
-      font-size: 0.95rem;
+      color: var(--som-text, #e5e7eb);
+      font-size: 0.9rem;
     }
 
     th {
-      color: #475569;
+      color: var(--som-text-muted, #9ca3af);
       font-weight: 600;
-      font-size: 0.88rem;
+      font-size: 0.78rem;
       text-transform: uppercase;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.04em;
+      border-bottom: 1px solid rgba(245, 158, 11, 0.2);
     }
 
     .mono {
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      overflow-wrap: anywhere;
+      font-size: 0.82rem;
     }
 
     .statusOk {
-      color: #166534;
+      color: #86efac;
       font-weight: 600;
     }
 
     .statusWarn {
-      color: #b45309;
+      color: #fcd34d;
       font-weight: 600;
     }
 
@@ -90,16 +91,23 @@ oathLogTemplate.innerHTML = `
       padding: 0.45rem 0.75rem;
       font: inherit;
       cursor: pointer;
-      color: #ffffff;
-      background: #4f46e5;
+      color: #06060f;
+      font-weight: 600;
+      background: var(--som-accent, #f59e0b);
+    }
+
+    button:hover:not(:disabled) {
+      background: var(--som-accent-strong, #fbbf24);
     }
 
     button.secondary {
-      background: #475569;
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--som-accent-strong, #fbbf24);
+      border: 1px solid var(--som-border, rgba(245, 158, 11, 0.22));
     }
 
     button:disabled {
-      opacity: 0.6;
+      opacity: 0.5;
       cursor: not-allowed;
     }
 
@@ -108,6 +116,8 @@ oathLogTemplate.innerHTML = `
       align-items: center;
       gap: 0.65rem;
       margin-top: 0.8rem;
+      color: var(--som-text-muted, #9ca3af);
+      font-size: 0.9rem;
     }
   </style>
 
@@ -245,7 +255,7 @@ class OathLog extends HTMLElement {
         const statusClass = row.verified_on_chain ? "statusOk" : "statusWarn";
         const statusText = row.verified_on_chain ? "Verified" : "Needs verification";
         const verifyDisabled = this.verifyingIds.has(row.id);
-        const wallet = row.wallet_address || "-";
+        const wallet = this.shortHash(row.wallet_address) || "-";
         const txLabel = this.shortHash(row.tx_hash);
         const txLink = row.explorer_url
           ? `<a class="mono" href="${this.escapeHtml(row.explorer_url)}" target="_blank" rel="noopener noreferrer">${this.escapeHtml(txLabel)}</a>`
@@ -259,7 +269,7 @@ class OathLog extends HTMLElement {
             <td>${this.escapeHtml(this.formatDate(row.created_at))}</td>
             <td>${this.escapeHtml(row.signer_name || "")}</td>
             <td>${this.escapeHtml(row.chain || "")} (${this.escapeHtml(row.network_mode || "")})</td>
-            <td class="mono">${this.escapeHtml(wallet)}</td>
+            <td class="mono" title="${this.escapeHtml(row.wallet_address || "")}">${this.escapeHtml(wallet)}</td>
             <td>${txLink}</td>
             <td class="${statusClass}">${statusText}</td>
             <td>${actionCell}</td>

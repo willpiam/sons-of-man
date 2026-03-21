@@ -12,6 +12,7 @@ appTemplate.innerHTML = `
       max-width: 820px;
       margin: 0 auto;
       padding: 1.5rem 1rem 2.5rem;
+      font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
     .devnetBadge {
@@ -26,20 +27,20 @@ appTemplate.innerHTML = `
       font-size: 0.75rem;
       letter-spacing: 0.03em;
       text-transform: uppercase;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
     }
 
     .card {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 1.1rem;
-      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+      background: var(--som-panel, #11162a);
+      border: 1px solid var(--som-border, rgba(245, 158, 11, 0.22));
+      border-radius: 14px;
+      padding: 1.4rem 1.3rem;
+      box-shadow: var(--som-shadow, 0 20px 40px rgba(0, 0, 0, 0.35));
     }
 
     h1, h2 {
       margin: 0;
-      color: #0f172a;
+      color: #fef3c7;
     }
 
     h1 {
@@ -48,25 +49,27 @@ appTemplate.innerHTML = `
     }
 
     p {
-      color: #334155;
+      color: var(--som-text, #e5e7eb);
       margin: 0.45rem 0;
-      line-height: 1.5;
+      line-height: 1.6;
     }
 
     .stepTag {
       margin: 0.55rem 0 1rem;
-      color: #64748b;
+      color: var(--som-text-muted, #9ca3af);
       font-size: 0.9rem;
     }
 
     .oathText {
       white-space: pre-wrap;
-      line-height: 1.6;
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
+      line-height: 1.7;
+      background: rgba(6, 6, 15, 0.5);
+      border: 1px solid var(--som-border, rgba(245, 158, 11, 0.22));
       border-radius: 8px;
-      padding: 1rem;
+      padding: 1rem 1.1rem;
       min-height: 180px;
+      color: var(--som-text, #e5e7eb);
+      font-size: 0.97rem;
     }
 
     .controls {
@@ -93,8 +96,18 @@ appTemplate.innerHTML = `
       width: 100%;
       padding: 0.65rem 0.7rem;
       border-radius: 8px;
-      border: 1px solid #cbd5e1;
+      border: 1px solid var(--som-border, rgba(245, 158, 11, 0.22));
+      background: rgba(6, 6, 15, 0.5);
+      color: var(--som-text, #e5e7eb);
       font: inherit;
+    }
+
+    input[type="text"]::placeholder {
+      color: var(--som-text-muted, #9ca3af);
+    }
+
+    input[type="checkbox"] {
+      accent-color: var(--som-accent, #f59e0b);
     }
 
     .chainButtons {
@@ -110,36 +123,48 @@ appTemplate.innerHTML = `
       padding: 0.62rem 0.95rem;
       font: inherit;
       cursor: pointer;
-      color: #ffffff;
-      background: #4f46e5;
+      color: #06060f;
+      font-weight: 600;
+      background: var(--som-accent, #f59e0b);
+    }
+
+    button:hover:not(:disabled) {
+      background: var(--som-accent-strong, #fbbf24);
     }
 
     button.secondary {
-      background: #475569;
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--som-accent-strong, #fbbf24);
+      border: 1px solid var(--som-border, rgba(245, 158, 11, 0.22));
     }
 
     button.ghost {
-      background: #e2e8f0;
-      color: #0f172a;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--som-text-muted, #9ca3af);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     button:disabled {
-      opacity: 0.6;
+      opacity: 0.5;
       cursor: not-allowed;
     }
 
     .error {
       margin-top: 0.8rem;
-      color: #b91c1c;
+      color: #f87171;
     }
 
     .successBox {
-      background: #f0fdf4;
-      border: 1px solid #bbf7d0;
+      background: rgba(34, 197, 94, 0.08);
+      border: 1px solid rgba(34, 197, 94, 0.25);
       border-radius: 8px;
       padding: 0.8rem;
       margin: 0.8rem 0;
       overflow-wrap: anywhere;
+    }
+
+    .successBox p {
+      color: #bbf7d0;
     }
 
     .links {
@@ -150,7 +175,7 @@ appTemplate.innerHTML = `
     }
 
     a {
-      color: #1d4ed8;
+      color: var(--som-accent-strong, #fbbf24);
     }
 
     .topLinks {
