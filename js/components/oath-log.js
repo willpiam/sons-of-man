@@ -114,7 +114,7 @@ oathLogTemplate.innerHTML = `
   <section class="card">
     <h1>Oath Ceremony Log</h1>
     <p>Newest entries first. Unverified transactions can be retried manually.</p>
-    <p><a id="backLink" href="./index.html">Back to Ceremony</a></p>
+    <p><a id="backLink" href="./ceremony.html">Back to Ceremony</a></p>
     <p id="errorText" class="error" hidden></p>
     <div class="tableWrap">
       <table>
@@ -162,7 +162,7 @@ class OathLog extends HTMLElement {
     this.nextBtn = this.shadowRoot.getElementById("nextBtn");
     this.pageInfo = this.shadowRoot.getElementById("pageInfo");
 
-    this.shadowRoot.getElementById("backLink").href = "./index.html" + window.location.search;
+    this.shadowRoot.getElementById("backLink").href = "./ceremony.html" + window.location.search;
 
     this.prevBtn.addEventListener("click", () => {
       if (this.page > 1) {

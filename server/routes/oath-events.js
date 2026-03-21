@@ -6,6 +6,7 @@ const router = Router();
 
 const CHAINS = new Set(["ethereum", "cardano"]);
 const MODES = new Set(["mainnet", "devnet"]);
+const LIST_MODES = new Set(["mainnet", "devnet", "all"]);
 
 function cleanText(input, maxLen = 10_000) {
   if (input === null || input === undefined) {
@@ -101,23 +102,35 @@ router.get("/oath-events", async (req, res) => {
   const offset = (page - 1) * limit;
   const networkMode = cleanText(req.query.network_mode, 20).toLowerCase() || "mainnet";
 
-  if (!MODES.has(networkMode)) {
-    return res.status(400).json({ error: "network_mode must be mainnet or devnet." });
+  if (!LIST_MODES.has(networkMode)) {
+    return res.status(400).json({ error: "network_mode must be mainnet, devnet, or all." });
   }
 
   try {
-    const [rowsResult, countResult] = await Promise.all([
-      pool.query(
+    const isAllMode = networkMode === "all";
+    const listQuery = isAllMode
+      ? `
+          SELECT id, signer_name, chain, tx_hash, wallet_address, network_mode, explorer_url, verified_on_chain, created_at
+          FROM oath_events
+          ORDER BY created_at DESC, id DESC
+          LIMIT $1 OFFSET $2
         `
+      : `
           SELECT id, signer_name, chain, tx_hash, wallet_address, network_mode, explorer_url, verified_on_chain, created_at
           FROM oath_events
           WHERE network_mode = $3
           ORDER BY created_at DESC, id DESC
           LIMIT $1 OFFSET $2
-        `,
-        [limit, offset, networkMode],
-      ),
-      pool.query("SELECT COUNT(*)::int AS total FROM oath_events WHERE network_mode = $1", [networkMode]),
+        `;
+    const listParams = isAllMode ? [limit, offset] : [limit, offset, networkMode];
+    const countQuery = isAllMode
+      ? "SELECT COUNT(*)::int AS total FROM oath_events"
+      : "SELECT COUNT(*)::int AS total FROM oath_events WHERE network_mode = $1";
+    const countParams = isAllMode ? [] : [networkMode];
+
+    const [rowsResult, countResult] = await Promise.all([
+      pool.query(listQuery, listParams),
+      pool.query(countQuery, countParams),
     ]);
 
     return res.json({
