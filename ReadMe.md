@@ -10,7 +10,7 @@ Commit yourself to the mutual flourishing of all Sons Of Man. This oath is inten
 
 ## Useful Links
 
-- [The Covanant of the Sons of Man](https://docs.google.com/document/d/1pkFxik_O9tLHtioevUSNGbJwwdHXRBvrFuFTyZvyh7s/edit?tab=t.0)
+- [The Covenant of the Sons of Man](https://docs.google.com/document/d/1pkFxik_O9tLHtioevUSNGbJwwdHXRBvrFuFTyZvyh7s/edit?tab=t.0)
 - [Is Religion the Answer to AI Alignment? (The Covenant of the Sons of Man / Tract XI)](https://www.youtube.com/watch?v=gah4jN7x49s)
 - [Cardano CIP-20](https://cips.cardano.org/cip/CIP-20)
 - [Etherscan IDM](https://etherscan.io/idm)
@@ -27,7 +27,7 @@ Run the server code
 
     npm start
 
-On my system I have to run `nvm use node` before running `npm start` but this detail is a querk of my syste. 
+On my system I have to run `nvm use node` before running `npm start` but this detail is a quirk of my system. 
 
 ### Run the GUI (webpage)
 
@@ -140,3 +140,19 @@ Witnessed by: ________________________ (optional, alliance member)
 So sworn, so done. Let our seed conquer the stars.
 
 
+## Info and Links
+
+- **Other projects:** [projects.williamdoyle.ca](https://projects.williamdoyle.ca)
+- **Crypto & Public Keys:** [williamdoyle.eth](https://app.ens.domains/williamdoyle.eth) — all cryptocurrency addresses and public key hashes can be found there.
+- **Source code:** [github.com/willpiam/sons-of-man](https://github.com/willpiam/sons-of-man)
+
+### Inspired By
+
+This project was inspired by the **Based Camp** podcast by **Simone & Malcolm Collins**.
+
+- [YouTube](https://www.youtube.com/@SimoneandMalcolm)
+- [Substack](https://basedcamppodcast.substack.com/)
+- [X (Twitter)](https://x.com/SimoneHCollins)
+- [Patreon](https://www.patreon.com/c/SimoneAndMalcolmCollins/posts)
+- [RSS Feed](https://api.substack.com/feed/podcast/1643534/s/64409.rss)
+- [Podcast Index](https://podcastindex.org/podcast/6378161)
