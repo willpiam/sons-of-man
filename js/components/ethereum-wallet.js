@@ -5,16 +5,16 @@ ethTemplate.innerHTML = `
   <style>
     :host {
       display: block;
-      border: 1px solid #e2e8f0;
+      border: 1px solid var(--som-border, rgba(245, 158, 11, 0.22));
       border-radius: 10px;
       padding: 1rem;
-      background: #ffffff;
-      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.05);
+      background: rgba(6, 6, 15, 0.5);
     }
 
     h2 {
       margin: 0 0 0.75rem;
       font-size: 1.1rem;
+      color: var(--som-text, #e5e7eb);
     }
 
     button {
@@ -22,14 +22,19 @@ ethTemplate.innerHTML = `
       border-radius: 10px;
       padding: 0.6rem 0.9rem;
       font: inherit;
-      color: #ffffff;
-      background: #4338ca;
+      font-weight: 600;
+      color: #06060f;
+      background: var(--som-accent, #f59e0b);
       cursor: pointer;
+    }
+
+    button:hover:not(:disabled) {
+      background: var(--som-accent-strong, #fbbf24);
     }
 
     button:disabled {
       cursor: not-allowed;
-      opacity: 0.6;
+      opacity: 0.5;
     }
 
     output {
@@ -37,13 +42,16 @@ ethTemplate.innerHTML = `
       margin-top: 0.85rem;
       padding: 0.65rem;
       border-radius: 8px;
-      background: #f8fafc;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--som-text, #e5e7eb);
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.88rem;
       overflow-wrap: anywhere;
     }
 
     .error {
-      color: #b91c1c;
+      color: #f87171;
       margin-top: 0.85rem;
     }
   </style>

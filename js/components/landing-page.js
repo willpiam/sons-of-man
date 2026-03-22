@@ -145,6 +145,116 @@ landingTemplate.innerHTML = `
       color: var(--som-text-muted);
     }
 
+    /* Info button */
+    .info-btn {
+      display: block;
+      margin: 2.5rem auto 0;
+      padding: 0.5rem 1.2rem;
+      border-radius: 999px;
+      border: 1px solid rgba(245, 158, 11, 0.18);
+      background: rgba(13, 16, 32, 0.6);
+      color: var(--som-text-muted, #9ca3af);
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: border-color 0.25s, color 0.25s;
+      letter-spacing: 0.02em;
+    }
+    .info-btn:hover {
+      border-color: rgba(245, 158, 11, 0.45);
+      color: #fcd34d;
+    }
+
+    /* Modal overlay */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(0, 0, 0, 0.72);
+      backdrop-filter: blur(4px);
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal {
+      position: relative;
+      max-width: 540px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      background: linear-gradient(170deg, #11162a, #0a0c17);
+      border: 1px solid rgba(245, 158, 11, 0.22);
+      border-radius: 16px;
+      padding: 2rem 1.8rem 1.6rem;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+      color: #d1d5db;
+      font-size: 0.92rem;
+      line-height: 1.65;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 0.8rem;
+      right: 0.8rem;
+      background: none;
+      border: none;
+      color: #9ca3af;
+      font-size: 1.3rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0.2rem 0.4rem;
+      border-radius: 6px;
+      transition: color 0.2s;
+    }
+    .modal-close:hover { color: #fcd34d; }
+
+    .modal h3 {
+      margin: 0 0 0.6rem;
+      font-size: 1.15rem;
+      color: #fef3c7;
+      font-family: "Georgia", "Times New Roman", serif;
+    }
+
+    .modal-section {
+      margin-bottom: 1.2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(245, 158, 11, 0.12);
+    }
+    .modal-section:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .modal a {
+      color: #fbbf24;
+      text-decoration: none;
+    }
+    .modal a:hover {
+      text-decoration: underline;
+    }
+
+    .modal .blurb {
+      color: #9ca3af;
+      font-size: 0.84rem;
+      margin-top: 0.15rem;
+    }
+
+    .modal .link-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem 0.9rem;
+      margin-top: 0.4rem;
+    }
+
+    .modal .link-list a {
+      font-size: 0.86rem;
+    }
+
     @keyframes pulse {
       0%,
       100% {
@@ -226,6 +336,47 @@ landingTemplate.innerHTML = `
       <a class="btn secondary" href="./ceremony.html?devnet">Enter the Ceremony (Testnet)</a>
     </div>
   </section>
+
+  <button class="info-btn" id="openInfoBtn">About &amp; Links</button>
+
+  <div class="modal-overlay" id="infoModal">
+    <div class="modal">
+      <button class="modal-close" id="closeInfoBtn">&times;</button>
+
+      <div class="modal-section">
+        <h3>Other Projects</h3>
+        <a href="https://projects.williamdoyle.ca" target="_blank" rel="noopener">Check out my other projects &rarr;</a>
+      </div>
+
+      <div class="modal-section">
+        <h3>Crypto &amp; Public Keys</h3>
+        <a href="https://app.ens.domains/williamdoyle.eth" target="_blank" rel="noopener">williamdoyle.eth</a>
+        <p class="blurb">All of my cryptocurrency addresses and public key hashes can be found there.</p>
+      </div>
+
+      <div class="modal-section">
+        <h3>Source Code</h3>
+        <a href="https://github.com/willpiam/sons-of-man" target="_blank" rel="noopener">github.com/willpiam/sons-of-man</a>
+        <p class="blurb">View the source code for this site.</p>
+      </div>
+
+      <div class="modal-section">
+        <h3>Inspired By</h3>
+        <p>
+          This project was inspired by the <strong>Based Camp</strong> podcast by
+          <strong>Simone &amp; Malcolm Collins</strong>.
+        </p>
+        <div class="link-list">
+          <a href="https://www.youtube.com/@SimoneandMalcolm" target="_blank" rel="noopener">YouTube</a>
+          <a href="https://basedcamppodcast.substack.com/" target="_blank" rel="noopener">Substack</a>
+          <a href="https://x.com/SimoneHCollins" target="_blank" rel="noopener">X (Twitter)</a>
+          <a href="https://www.patreon.com/c/SimoneAndMalcolmCollins/posts" target="_blank" rel="noopener">Patreon</a>
+          <a href="https://api.substack.com/feed/podcast/1643534/s/64409.rss" target="_blank" rel="noopener">RSS Feed</a>
+          <a href="https://podcastindex.org/podcast/6378161" target="_blank" rel="noopener">Podcast Index</a>
+        </div>
+      </div>
+    </div>
+  </div>
 `;
 
 class LandingPage extends HTMLElement {
@@ -238,6 +389,19 @@ class LandingPage extends HTMLElement {
   connectedCallback() {
     this.oathTextEl = this.shadowRoot.getElementById("oathText");
     this.loadOath();
+    this.initModal();
+  }
+
+  initModal() {
+    const openBtn = this.shadowRoot.getElementById("openInfoBtn");
+    const closeBtn = this.shadowRoot.getElementById("closeInfoBtn");
+    const overlay = this.shadowRoot.getElementById("infoModal");
+
+    openBtn.addEventListener("click", () => overlay.classList.add("open"));
+    closeBtn.addEventListener("click", () => overlay.classList.remove("open"));
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) overlay.classList.remove("open");
+    });
   }
 
   async loadOath() {

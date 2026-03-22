@@ -17,9 +17,25 @@ Commit yourself to the mutual flourishing of all Sons Of Man. This oath is inten
 
 ## Run locally
 
-Start a local server and navigate to `index.html`. The easiest way to do this is
+### Run local server
+
+Enter the server directory 
+
+    cd server
+
+Run the server code
+
+    npm start
+
+On my system I have to run `nvm use node` before running `npm start` but this detail is a querk of my syste. 
+
+### Run the GUI (webpage)
+
+Start another local server and navigate to the entry point of that server. The easiest way to do this is using python.
 
     python3 -m http.server 8000
+
+In this case the hosted page can be found at `http://localhost:8000/`
 
 ## Devnet mode
 
