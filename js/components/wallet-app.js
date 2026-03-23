@@ -516,6 +516,47 @@ class WalletApp extends HTMLElement {
     doc.setFontSize(10);
     doc.text("QR code links to the transaction explorer page.", 20, 160);
 
+    // --- Oath text section ---
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const marginLeft = 20;
+    const marginRight = 20;
+    const contentWidth = pageWidth - marginLeft - marginRight;
+    let cursorY = 174;
+
+    // Decorative separator
+    doc.setDrawColor(180, 160, 120);
+    doc.setLineWidth(0.4);
+    doc.line(marginLeft, cursorY, pageWidth - marginRight, cursorY);
+    cursorY += 10;
+
+    // "The Oath" heading
+    doc.setFont("helvetica", "bolditalic");
+    doc.setFontSize(14);
+    doc.setTextColor(90, 70, 40);
+    doc.text("The Oath", marginLeft, cursorY);
+    cursorY += 8;
+
+    // Oath body text
+    doc.setFont("helvetica", "italic");
+    doc.setFontSize(10);
+    doc.setTextColor(80, 80, 80);
+    const oathLines = doc.splitTextToSize(this.oathText, contentWidth);
+    const lineHeight = 5;
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const bottomMargin = 20;
+    for (const line of oathLines) {
+      if (cursorY + lineHeight > pageHeight - bottomMargin) {
+        doc.addPage();
+        cursorY = 20;
+      }
+      doc.text(line, marginLeft, cursorY);
+      cursorY += lineHeight;
+    }
+
+    // Reset styles
+    doc.setTextColor(0, 0, 0);
+    doc.setFont("helvetica", "normal");
+
     const safeName = this.signerName.replace(/[^a-z0-9_-]/gi, "_").slice(0, 40) || "signer";
     doc.save(`sons-of-man-certificate-${safeName}.pdf`);
   }
