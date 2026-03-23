@@ -52,12 +52,21 @@ tickerTemplate.innerHTML = `
       min-width: 0;
     }
 
+    .time {
+      color: var(--som-text-muted, #9ca3af);
+      font-size: 0.82rem;
+      margin-left: 0.8rem;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
     .txLink {
       color: var(--som-accent-strong, #fbbf24);
       font-size: 0.82rem;
       margin-left: 0.8rem;
       white-space: nowrap;
       text-decoration: none;
+      flex-shrink: 0;
     }
 
     .txLink:hover {
@@ -127,7 +136,36 @@ class OathTicker extends HTMLElement {
     const linkHtml = txUrl
       ? `<a class="txLink" href="${txUrl}" target="_blank" rel="noopener noreferrer">View tx</a>`
       : "";
-    return `<li><span class="name">${name}</span>${linkHtml}</li>`;
+    const timeHtml = row.created_at
+      ? `<span class="time">${this.escapeHtml(this.timeAgo(row.created_at))}</span>`
+      : "";
+    return `<li><span class="name">${name}</span>${timeHtml}${linkHtml}</li>`;
+  }
+
+  timeAgo(timestamp) {
+    const now = Date.now();
+    const then = new Date(timestamp).getTime();
+    const seconds = Math.floor((now - then) / 1000);
+
+    if (seconds < 60) return "just now";
+
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return `${minutes} minute${minutes === 1 ? "" : "s"} ago`;
+
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours} hour${hours === 1 ? "" : "s"} ago`;
+
+    const days = Math.floor(hours / 24);
+    if (days < 7) return `${days} day${days === 1 ? "" : "s"} ago`;
+
+    const weeks = Math.floor(days / 7);
+    if (weeks < 5) return `${weeks} week${weeks === 1 ? "" : "s"} ago`;
+
+    const months = Math.floor(days / 30.44);
+    if (months < 12) return `${months} month${months === 1 ? "" : "s"} ago`;
+
+    const years = Math.floor(days / 365.25);
+    return `${years} year${years === 1 ? "" : "s"} ago`;
   }
 
   escapeHtml(value) {
