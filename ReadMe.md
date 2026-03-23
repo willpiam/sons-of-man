@@ -140,6 +140,20 @@ Witnessed by: ________________________ (optional, alliance member)
 So sworn, so done. Let our seed conquer the stars.
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Info and Links
 
 - **Other projects:** [projects.williamdoyle.ca](https://projects.williamdoyle.ca)

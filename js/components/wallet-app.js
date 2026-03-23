@@ -492,68 +492,171 @@ class WalletApp extends HTMLElement {
       return;
     }
     const doc = new jsPdfModule.jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const outerMargin = 10;
+    const innerMargin = 14;
+    const contentLeft = 22;
+    const contentRight = pageWidth - 22;
+    const contentWidth = contentRight - contentLeft;
+    const centerX = pageWidth / 2;
+    const accentRgb = [180, 150, 80];
+
+    const drawFrame = () => {
+      doc.setDrawColor(60, 60, 60);
+      doc.setLineWidth(0.6);
+      doc.rect(outerMargin, outerMargin, pageWidth - outerMargin * 2, pageHeight - outerMargin * 2);
+      doc.setLineWidth(0.3);
+      doc.rect(innerMargin, innerMargin, pageWidth - innerMargin * 2, pageHeight - innerMargin * 2);
+    };
+    drawFrame();
+
+    const signerName = String(this.signerName || "").trim() || "Anonymous Signer";
+    const chainValue = this.signResult?.chain || "";
+    const isDevnet = walletState.app.networkMode === "devnet";
+    const chainLabel =
+      chainValue === "ethereum"
+        ? isDevnet
+          ? "Ethereum (Sepolia)"
+          : "Ethereum"
+        : chainValue === "cardano"
+          ? isDevnet
+            ? "Cardano (Preview)"
+            : "Cardano"
+          : chainValue;
+    const txHash = String(this.signResult?.txHash || "").trim() || String(txUrl || "").split("/").pop();
+    const txPrefix =
+      chainValue === "ethereum"
+        ? isDevnet
+          ? "sepolia"
+          : "ethereum"
+        : chainValue === "cardano"
+          ? isDevnet
+            ? "cardano-preview"
+            : "cardano"
+          : String(chainValue || "transaction").toLowerCase();
+    const txDisplay = txHash ? `${txPrefix}::${txHash}` : txPrefix;
+    const issuedDate = new Date().toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+
+    let cursorY = 30;
+
+    doc.setFont("times", "bold");
+    doc.setFontSize(24);
+    doc.setTextColor(25, 25, 25);
+    doc.text("SONS OF MAN", centerX, cursorY, { align: "center" });
+    cursorY += 6;
+
+    doc.setDrawColor(...accentRgb);
+    doc.setLineWidth(0.8);
+    doc.line(centerX - 30, cursorY, centerX + 30, cursorY);
+    cursorY += 8;
+
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(18);
-    doc.text("Sons of Man - Oath Certificate", 20, 24);
+    doc.setFontSize(14);
+    doc.setTextColor(70, 70, 70);
+    doc.text("OATH CERTIFICATE", centerX, cursorY, { align: "center" });
+    cursorY += 14;
+
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(12);
-    doc.text(`Name: ${this.signerName}`, 20, 40);
-    doc.text(`Chain: ${this.signResult.chain}`, 20, 50);
-    doc.text("Transaction Link:", 20, 62);
-    doc.setTextColor(29, 78, 216);
-    doc.text(txUrl, 20, 70, { maxWidth: 170 });
-    doc.setTextColor(0, 0, 0);
-    doc.text("Site Link:", 20, 86);
-    doc.setTextColor(29, 78, 216);
-    doc.text(siteUrl, 20, 94, { maxWidth: 170 });
-    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(10);
+    doc.setTextColor(110, 110, 110);
+    doc.text("Presented to", centerX, cursorY, { align: "center" });
+    cursorY += 8;
+
+    doc.setFont("times", "bold");
+    doc.setFontSize(20);
+    doc.setTextColor(20, 20, 20);
+    doc.text(signerName, centerX, cursorY, { align: "center", maxWidth: contentWidth });
+    cursorY += 8;
+
+    const detailsTop = cursorY;
+    const detailsHeight = 30;
+    doc.setDrawColor(215, 215, 215);
+    doc.setFillColor(245, 245, 245);
+    if (typeof doc.roundedRect === "function") {
+      doc.roundedRect(contentLeft, detailsTop, contentWidth, detailsHeight, 2, 2, "FD");
+    } else {
+      doc.rect(contentLeft, detailsTop, contentWidth, detailsHeight, "FD");
+    }
+
+    let detailsY = detailsTop + 7;
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(10);
+    doc.setTextColor(65, 65, 65);
+    doc.text(`Chain: ${chainLabel}`, contentLeft + 4, detailsY);
+    doc.text(`Date: ${issuedDate}`, contentLeft + 70, detailsY);
+    detailsY += 7;
+    doc.text("Transaction:", contentLeft + 4, detailsY);
+    detailsY += 5;
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(25, 90, 180);
+    if (txUrl && typeof doc.textWithLink === "function") {
+      doc.textWithLink(txDisplay, contentLeft + 4, detailsY, { url: txUrl, maxWidth: contentWidth - 8 });
+    } else {
+      doc.text(txDisplay, contentLeft + 4, detailsY, { maxWidth: contentWidth - 8 });
+    }
+    doc.setTextColor(40, 40, 40);
+    cursorY = detailsTop + detailsHeight + 10;
 
     const qr = window.qrcode(0, "M");
     qr.addData(txUrl);
     qr.make();
     const qrUrl = qr.createDataURL(5, 2);
-    doc.addImage(qrUrl, "PNG", 20, 108, 45, 45);
+    const qrSize = 36;
+    doc.addImage(qrUrl, "PNG", centerX - qrSize / 2, cursorY, qrSize, qrSize);
+    cursorY += qrSize + 7;
+
+    doc.setFont("helvetica", "normal");
     doc.setFontSize(10);
-    doc.text("QR code links to the transaction explorer page.", 20, 160);
-
-    // --- Oath text section ---
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const marginLeft = 20;
-    const marginRight = 20;
-    const contentWidth = pageWidth - marginLeft - marginRight;
-    let cursorY = 174;
-
-    // Decorative separator
-    doc.setDrawColor(180, 160, 120);
-    doc.setLineWidth(0.4);
-    doc.line(marginLeft, cursorY, pageWidth - marginRight, cursorY);
+    doc.setTextColor(95, 95, 95);
+    doc.text("Scan to view the on-chain transaction", centerX, cursorY, { align: "center" });
     cursorY += 10;
 
-    // "The Oath" heading
-    doc.setFont("helvetica", "bolditalic");
-    doc.setFontSize(14);
-    doc.setTextColor(90, 70, 40);
-    doc.text("The Oath", marginLeft, cursorY);
+    doc.setDrawColor(...accentRgb);
+    doc.setLineWidth(0.6);
+    doc.line(contentLeft, cursorY, contentRight, cursorY);
     cursorY += 8;
 
-    // Oath body text
+    doc.setFont("times", "bolditalic");
+    doc.setFontSize(13);
+    doc.setTextColor(80, 65, 40);
+    doc.text("The Oath", centerX, cursorY, { align: "center" });
+    cursorY += 8;
+
     doc.setFont("helvetica", "italic");
     doc.setFontSize(10);
-    doc.setTextColor(80, 80, 80);
+    doc.setTextColor(70, 70, 70);
     const oathLines = doc.splitTextToSize(this.oathText, contentWidth);
     const lineHeight = 5;
-    const pageHeight = doc.internal.pageSize.getHeight();
-    const bottomMargin = 20;
+    const bottomMargin = 22;
     for (const line of oathLines) {
       if (cursorY + lineHeight > pageHeight - bottomMargin) {
         doc.addPage();
-        cursorY = 20;
+        drawFrame();
+        cursorY = 24;
+        doc.setFont("helvetica", "italic");
+        doc.setFontSize(10);
+        doc.setTextColor(70, 70, 70);
       }
-      doc.text(line, marginLeft, cursorY);
+      doc.text(line, contentLeft, cursorY);
       cursorY += lineHeight;
     }
 
-    // Reset styles
+    const footerY = pageHeight - 20;
+    doc.setDrawColor(220, 220, 220);
+    doc.setLineWidth(0.3);
+    doc.line(contentLeft, footerY - 4, contentRight, footerY - 4);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9);
+    doc.setTextColor(100, 100, 100);
+    doc.text("Site:", contentLeft, footerY);
+    doc.setTextColor(25, 90, 180);
+    doc.text(siteUrl, contentLeft + 8, footerY, { maxWidth: contentWidth - 8 });
+
     doc.setTextColor(0, 0, 0);
     doc.setFont("helvetica", "normal");
 
