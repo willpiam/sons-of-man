@@ -319,6 +319,60 @@ landingTemplate.innerHTML = `
     </p>
   </section>
 
+
+
+
+
+
+
+
+
+
+
+
+  <section class="section">
+    <h2>How It Works</h2>
+    <p>
+      When you take this oath you write it directly onto a public blockchain. Blockchains are
+      append-only ledgers maintained by thousands of independent nodes worldwide. Data written
+      to them is, for all practical purposes, <strong>permanent</strong>.
+    </p>
+    <p>
+      <strong>This is not an NFT.</strong> There is no token, no asset, nothing to buy or sell.
+      Think of it more like a piece of graffiti carved into an ever growing wall where you can only 
+      write to the section of wall currently being constructed.
+    </p>
+    <div class="points">
+      <div class="point">
+        <strong>Ethereum&ensp;&mdash;&ensp;</strong>A 0-value transaction is sent to the
+        traditional burn address <code style="color:#fbbf24;">0x000...dEaD</code> with your oath
+        encoded in the transaction's input data (an IDM). The text is permanently readable
+        by anyone on-chain.
+      </div>
+      <div class="point">
+        <strong>Cardano&ensp;&mdash;&ensp;</strong>Your oath is embedded via
+        <a href="https://cips.cardano.org/cip/CIP-20" target="_blank" rel="noopener" style="color:#fbbf24;">CIP-20</a>
+        transaction metadata in a self-transaction (you send to yourself). The message is
+        permanently inscribed in the transaction metadata on-chain.
+      </div>
+    </div>
+    <p class="muted">
+      Both networks were chosen because they are well-established, decentralised, and
+      well-suited to carrying small pieces of text permanently.
+      No fee is charged beyond the network's own transaction cost.
+    </p>
+  </section>
+
+
+
+
+
+
+
+
+
+
+
   <section class="section">
     <h2>The Sons of Man Oath</h2>
     <p class="muted">Read the oath in full before deciding whether to proceed.</p>

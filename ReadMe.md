@@ -2,6 +2,8 @@
 
 Commit yourself to the mutual flourishing of all Sons Of Man. This oath is intended to be taken by members of the Sons Of Man alliance whether human, AI, or something else. 
 
+[Visit the Site](https://sons-of-man-static-site.onrender.com/)
+
 ## The Process
 
 1. read the oath and ensure you want to commit to it
