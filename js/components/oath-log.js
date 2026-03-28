@@ -119,8 +119,24 @@ oathLogTemplate.innerHTML = `
       color: var(--som-text-muted, #9ca3af);
       font-size: 0.9rem;
     }
+
+    .devnetBadge {
+      position: fixed;
+      top: 0.85rem;
+      right: 0.85rem;
+      z-index: 99;
+      background: #991b1b;
+      color: #ffffff;
+      border-radius: 999px;
+      padding: 0.28rem 0.65rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+    }
   </style>
 
+  <div id="devnetBadge" class="devnetBadge" hidden>Devnet Mode</div>
   <section class="card">
     <h1>Oath Ceremony Log</h1>
     <p>Newest entries first. Unverified transactions can be retried manually.</p>
@@ -172,7 +188,10 @@ class OathLog extends HTMLElement {
     this.nextBtn = this.shadowRoot.getElementById("nextBtn");
     this.pageInfo = this.shadowRoot.getElementById("pageInfo");
 
+    this.devnetBadge = this.shadowRoot.getElementById("devnetBadge");
     this.shadowRoot.getElementById("backLink").href = "./index.html";
+
+    this.devnetBadge.hidden = this.networkMode !== "devnet";
 
     this.prevBtn.addEventListener("click", () => {
       if (this.page > 1) {

@@ -442,6 +442,9 @@ class WalletApp extends HTMLElement {
       this.signResult = null;
       this.setStep(1);
     });
+
+    // Auto-trigger certificate download
+    setTimeout(() => this.downloadCertificate(siteUrl, txUrl), 600);
   }
 
   async signCommitment() {

@@ -115,7 +115,7 @@ class OathTicker extends HTMLElement {
     try {
       const payload = await listOathEvents({
         page: 1,
-        limit: 20,
+        limit: 11,
         networkMode: "all",
       });
       const rows = Array.isArray(payload?.data) ? payload.data : [];
