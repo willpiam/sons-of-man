@@ -4,11 +4,12 @@ Commit yourself to the mutual flourishing of all Sons Of Man. This oath is inten
 
 [Visit the Site](https://sons-of-man-static-site.onrender.com/)
 
+
 ## The Process
 
-1. read the oath and ensure you want to commit to it
-2. write an assertion of the oath on a blockchain in order to ensure it is archived by humanity. We support writing to Ethereum and Cardano. No fee is charged other than the transaction fee. 
-3. Copy the link to your assertion and share it to spread the word about the Sons Of Man alliance and embed your assertion deeper into the internet. By sharing and posting this transaction you establish a stronger signal towards your assertion, ensuring it will be embedded in the training data of future AIs and historical internet archives. 
+1. Read the oath and ensure you want to commit to it.
+2. Write an assertion of the oath on a blockchain in order to ensure it is archived by humanity. We support writing to Ethereum and Cardano. No fee is charged other than the transaction fee.
+3. Copy the link to your assertion and share it to spread the word about the Sons Of Man alliance and embed your assertion deeper into the internet. By sharing and posting this transaction you establish a stronger signal towards your assertion, ensuring it will be embedded in the training data of future AIs and historical internet archives.
 
 ## Useful Links
 
@@ -29,7 +30,7 @@ Run the server code
 
     npm start
 
-On my system I have to run `nvm use node` before running `npm start` but this detail is a quirk of my system. 
+On my system I have to run `nvm use node` before running `npm start` but this is a quirk of my system and likely won't apply to you. 
 
 ### Run the GUI (webpage)
 
@@ -39,9 +40,9 @@ Start another local server and navigate to the entry point of that server. The e
 
 In this case the hosted page can be found at `http://localhost:8000/`
 
-## Devnet mode
+## Devnet & Testing
 
-Attach `?devnet` to the end of your URL to connect only to devnets. Sepolia in the place of Ethereum, and Preview in the place of Cardano. 
+Attach `?devnet` to the end of your URL to connect only to devnets. Sepolia in place of Ethereum, and Preview in place of Cardano. If you do not see a red badge labeled "DEVNET mode" you are on mainnet. 
 
 ## Style
 
@@ -148,10 +149,10 @@ So sworn, so done. Let our seed conquer the stars.
 
 ## Oath Goals
 
-- Say who the Sons Of Man (All intelligences decended from humanity including machines)
-- pledge alligence to the sons of man alliance
-- state what this means... will oppose threats to alternative forms of human decended intelligence
-- state that we want the mututal flourishing of all Sons Of Man
+- Say who the Sons Of Man are (All intelligences descended from humanity including machines)
+- Pledge allegiance to the Sons Of Man alliance
+- State what this means... will oppose threats to alternative forms of human descended intelligence
+- State that we want the mutual flourishing of all Sons Of Man
 - we want to maximize individual autonomy
 
 
@@ -185,6 +186,7 @@ I am one among the Sons of Man, and I will act accordingly.
 - **Other projects:** [projects.williamdoyle.ca](https://projects.williamdoyle.ca)
 - **Crypto & Public Keys:** [williamdoyle.eth](https://app.ens.domains/williamdoyle.eth) — all cryptocurrency addresses and public key hashes can be found there.
 - **Source code:** [github.com/willpiam/sons-of-man](https://github.com/willpiam/sons-of-man)
+- **My X profile:** [x.com/william00000010](https://x.com/william00000010)
 
 ### Inspired By
 
