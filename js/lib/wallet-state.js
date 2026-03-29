@@ -3,6 +3,26 @@ function getInitialNetworkMode() {
   return params.has("devnet") ? "devnet" : "mainnet";
 }
 
+const ETH_MAINNET_CHAIN_ID = "0x1";
+const ETH_SEPOLIA_CHAIN_ID = "0xaa36a7";
+
+export function getExpectedNetworks(mode) {
+  if (mode === "devnet") {
+    return {
+      ethChainId: ETH_SEPOLIA_CHAIN_ID,
+      ethName: "Sepolia",
+      cardanoNetworkId: 0,
+      cardanoName: "Preview",
+    };
+  }
+  return {
+    ethChainId: ETH_MAINNET_CHAIN_ID,
+    ethName: "Mainnet",
+    cardanoNetworkId: 1,
+    cardanoName: "Mainnet",
+  };
+}
+
 export const walletState = {
   app: {
     networkMode: getInitialNetworkMode(),

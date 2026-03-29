@@ -1,9 +1,7 @@
 import { sendCardanoCip20Message } from "../lib/cardano-tx.js";
-import { walletState } from "../lib/wallet-state.js";
+import { walletState, getExpectedNetworks } from "../lib/wallet-state.js";
 
 const encoder = new TextEncoder();
-const ETH_MAINNET_CHAIN_ID = "0x1";
-const ETH_SEPOLIA_CHAIN_ID = "0xaa36a7";
 const ETH_DEAD_ADDRESS = "0x000000000000000000000000000000000000dEaD";
 
 function utf8ToHex(text) {
@@ -30,23 +28,6 @@ function splitForCip20(text, maxBytes = 64) {
     chunks.push(current);
   }
   return chunks;
-}
-
-function getExpectedNetworks(mode) {
-  if (mode === "devnet") {
-    return {
-      ethChainId: ETH_SEPOLIA_CHAIN_ID,
-      ethName: "Sepolia",
-      cardanoNetworkId: 0,
-      cardanoName: "Preview",
-    };
-  }
-  return {
-    ethChainId: ETH_MAINNET_CHAIN_ID,
-    ethName: "Mainnet",
-    cardanoNetworkId: 1,
-    cardanoName: "Mainnet",
-  };
 }
 
 export function getExplorerUrl(chain, networkMode, txHash) {

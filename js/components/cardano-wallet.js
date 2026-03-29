@@ -1,5 +1,5 @@
 import { convertBits, encodeBech32 } from "../lib/bech32.js";
-import { updateWalletState } from "../lib/wallet-state.js";
+import { updateWalletState, walletState, getExpectedNetworks } from "../lib/wallet-state.js";
 
 const cardanoTemplate = document.createElement("template");
 cardanoTemplate.innerHTML = `
@@ -66,12 +66,28 @@ cardanoTemplate.innerHTML = `
       color: #f87171;
       margin-top: 0.85rem;
     }
+
+    .networkWarning {
+      margin-top: 0.85rem;
+      padding: 0.75rem 0.85rem;
+      border-radius: 8px;
+      background: rgba(153, 27, 27, 0.25);
+      border: 1px solid rgba(248, 113, 113, 0.4);
+      color: #fca5a5;
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
+    .networkWarning strong {
+      color: #f87171;
+    }
   </style>
 
   <section>
     <h2>Cardano Wallet</h2>
     <div id="walletList"></div>
     <output id="addressOut" hidden></output>
+    <div id="networkWarning" class="networkWarning" hidden></div>
     <p id="errorText" class="error" hidden></p>
   </section>
 `;
@@ -147,6 +163,7 @@ class CardanoWallet extends HTMLElement {
     this.walletList = this.shadowRoot.getElementById("walletList");
     this.addressOut = this.shadowRoot.getElementById("addressOut");
     this.errorText = this.shadowRoot.getElementById("errorText");
+    this.networkWarning = this.shadowRoot.getElementById("networkWarning");
     this.renderWalletButtons();
   }
 
@@ -188,6 +205,7 @@ class CardanoWallet extends HTMLElement {
 
   async connectWallet(walletName) {
     this.showError("");
+    this.networkWarning.hidden = true;
     this.addressOut.hidden = true;
     this.setButtonsDisabled(true);
 
@@ -205,16 +223,43 @@ class CardanoWallet extends HTMLElement {
       }
 
       const address = cborHexAddressToBech32(selected);
-      updateWalletState("cardano", { connected: true, address, api });
+
+      const networkId = await api.getNetworkId();
+      const mismatch = this.checkNetworkMismatch(networkId);
+
       this.addressOut.value = address;
       this.addressOut.textContent = `Address: ${address}`;
       this.addressOut.hidden = false;
+
+      if (mismatch) {
+        updateWalletState("cardano", { connected: false, address, api: null });
+      } else {
+        updateWalletState("cardano", { connected: true, address, api });
+      }
     } catch (error) {
       updateWalletState("cardano", { connected: false, address: "", api: null });
       this.showError(error?.message || "Failed to connect Cardano wallet.");
     } finally {
       this.setButtonsDisabled(false);
     }
+  }
+
+  checkNetworkMismatch(networkId) {
+    const mode = walletState.app.networkMode;
+    const expected = getExpectedNetworks(mode);
+
+    if (networkId !== expected.cardanoNetworkId) {
+      const walletNetwork = networkId === 1 ? "Mainnet" : "Preview/Testnet";
+      this.networkWarning.innerHTML =
+        `<strong>Network mismatch:</strong> Your wallet is connected to <strong>${walletNetwork}</strong>, ` +
+        `but this site is in <strong>${mode === "devnet" ? "Devnet" : "Mainnet"} mode</strong>. ` +
+        `Please switch your wallet to <strong>${expected.cardanoName}</strong> to continue.`;
+      this.networkWarning.hidden = false;
+      return true;
+    }
+
+    this.networkWarning.hidden = true;
+    return false;
   }
 
   showError(message) {
