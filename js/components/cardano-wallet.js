@@ -45,6 +45,10 @@ cardanoTemplate.innerHTML = `
       opacity: 0.5;
     }
 
+    output[hidden] {
+      display: none;
+    }
+
     output {
       display: block;
       margin-top: 0.85rem;
