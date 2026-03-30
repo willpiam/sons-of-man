@@ -42,7 +42,9 @@ In this case the hosted page can be found at `http://localhost:8000/`
 
 ## Devnet & Testing
 
-Attach `?devnet` to the end of your URL to connect only to devnets. Sepolia in place of Ethereum, and Preview in place of Cardano. If you do not see a red badge labeled "DEVNET mode" you are on mainnet. 
+Attach `?devnet` to the end of your URL to connect only to devnets. If you do not see a red badge labeled "DEVNET mode" you are on mainnet. 
+
+In devnet mode you will want to configure your wallet to use the testnet. Set Ethereum wallets to use the Sepolia testnet and Cardano wallets to use the Preview testnet. You will need testnet funds in order to pay for transaction costs. Free Sepolia tokens can be found [here](https://cloud.google.com/application/web3/faucet/ethereum/sepolia). Free Cardano-Preview tokens can be found [here](https://docs.cardano.org/cardano-testnets/tools/faucet).
 
 ## Style
 
