@@ -1,6 +1,7 @@
 import "dotenv/config";
 import cors from "cors";
 import express from "express";
+import blockfrostProxyRouter from "./routes/blockfrost-proxy.js";
 import oathEventsRouter from "./routes/oath-events.js";
 
 const app = express();
@@ -17,6 +18,7 @@ app.get("/health", (_req, res) => {
   res.json({ ok: true });
 });
 
+app.use("/api/blockfrost", blockfrostProxyRouter);
 app.use("/api", oathEventsRouter);
 
 app.use((_req, res) => {

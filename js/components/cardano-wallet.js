@@ -1,4 +1,4 @@
-import { convertBits, encodeBech32 } from "../lib/bech32.js";
+import { cardanoAddressHexToBech32 } from "../lib/lucid-evolution.js";
 import { updateWalletState, walletState, getExpectedNetworks } from "../lib/wallet-state.js";
 
 const cardanoTemplate = document.createElement("template");
@@ -92,66 +92,6 @@ cardanoTemplate.innerHTML = `
   </section>
 `;
 
-function hexToBytes(hex) {
-  if (!hex || hex.length % 2 !== 0) {
-    throw new Error("Invalid hex address from wallet.");
-  }
-
-  const bytes = new Uint8Array(hex.length / 2);
-  for (let i = 0; i < hex.length; i += 2) {
-    bytes[i / 2] = parseInt(hex.slice(i, i + 2), 16);
-  }
-  return bytes;
-}
-
-function decodeCborByteString(inputBytes) {
-  const first = inputBytes[0];
-  const major = first >> 5;
-  const additional = first & 0x1f;
-
-  if (major !== 2) {
-    return null;
-  }
-
-  let offset = 1;
-  let length = 0;
-  if (additional < 24) {
-    length = additional;
-  } else if (additional === 24) {
-    length = inputBytes[offset];
-    offset += 1;
-  } else if (additional === 25) {
-    length = (inputBytes[offset] << 8) | inputBytes[offset + 1];
-    offset += 2;
-  } else {
-    return null;
-  }
-
-  if (offset + length > inputBytes.length) {
-    return null;
-  }
-
-  return inputBytes.slice(offset, offset + length);
-}
-
-function detectHrp(addressBytes) {
-  const networkId = addressBytes[0] & 0x0f;
-  return networkId === 0 ? "addr_test" : "addr";
-}
-
-function cborHexAddressToBech32(cborHex) {
-  const raw = hexToBytes(cborHex);
-  const addressBytes = decodeCborByteString(raw) || raw;
-  if (addressBytes.length === 0) {
-    throw new Error("Cardano wallet returned an empty address.");
-  }
-  const bech32Data = convertBits([...addressBytes], 8, 5, true);
-  if (!bech32Data) {
-    throw new Error("Failed to convert Cardano address to bech32.");
-  }
-  return encodeBech32(detectHrp(addressBytes), bech32Data);
-}
-
 class CardanoWallet extends HTMLElement {
   constructor() {
     super();
@@ -222,7 +162,7 @@ class CardanoWallet extends HTMLElement {
         throw new Error("No Cardano addresses were returned by the wallet.");
       }
 
-      const address = cborHexAddressToBech32(selected);
+      const address = await cardanoAddressHexToBech32(selected);
 
       const networkId = await api.getNetworkId();
       const mismatch = this.checkNetworkMismatch(networkId);
