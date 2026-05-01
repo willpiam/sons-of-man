@@ -317,6 +317,10 @@ class AgnosticCommitApp extends HTMLElement {
   }
 
   connectedCallback() {
+    if (window.location.pathname === "/commit") {
+      console.log("hello world");
+    }
+
     this.stepTag = this.shadowRoot.getElementById("stepTag");
     this.stepContent = this.shadowRoot.getElementById("stepContent");
     this.errorText = this.shadowRoot.getElementById("errorText");

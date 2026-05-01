@@ -1,21 +1,47 @@
 import { API_BASE_URL } from "./api.js";
 
-const LUCID_URL = "https://esm.sh/@lucid-evolution/lucid@0.4.30?bundle";
-const LUCID_PROVIDER_URL = "https://esm.sh/@lucid-evolution/provider@0.1.91?bundle";
+const LUCID_URLS = [
+  "https://cdn.jsdelivr.net/npm/@lucid-evolution/lucid@0.4.30/+esm",
+  "https://esm.sh/@lucid-evolution/lucid@0.4.30?bundle",
+];
+const LUCID_PROVIDER_URLS = [
+  "https://cdn.jsdelivr.net/npm/@lucid-evolution/provider@0.1.91/+esm",
+  "https://esm.sh/@lucid-evolution/provider@0.1.91?bundle",
+];
 
 let lucidModulePromise = null;
 let lucidProviderModulePromise = null;
 
+async function importWithFallback(urls, label) {
+  const errors = [];
+
+  for (const url of urls) {
+    try {
+      return await import(url);
+    } catch (error) {
+      errors.push(`${url}: ${error?.message || error}`);
+    }
+  }
+
+  throw new Error(`Failed to load ${label}. ${errors.join(" | ")}`);
+}
+
 export function loadLucid() {
   if (!lucidModulePromise) {
-    lucidModulePromise = import(LUCID_URL);
+    lucidModulePromise = importWithFallback(LUCID_URLS, "Lucid").catch((error) => {
+      lucidModulePromise = null;
+      throw error;
+    });
   }
   return lucidModulePromise;
 }
 
 export function loadLucidProvider() {
   if (!lucidProviderModulePromise) {
-    lucidProviderModulePromise = import(LUCID_PROVIDER_URL);
+    lucidProviderModulePromise = importWithFallback(LUCID_PROVIDER_URLS, "Lucid provider").catch((error) => {
+      lucidProviderModulePromise = null;
+      throw error;
+    });
   }
   return lucidProviderModulePromise;
 }
