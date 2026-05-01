@@ -46,6 +46,10 @@ Attach `?devnet` to the end of your URL to connect only to devnets. If you do no
 
 In devnet mode you will want to configure your wallet to use the testnet. Set Ethereum wallets to use the Sepolia testnet and Cardano wallets to use the Preview testnet. You will need testnet funds in order to pay for transaction costs. Free Sepolia tokens can be found [here](https://cloud.google.com/application/web3/faucet/ethereum/sepolia). Free Cardano-Preview tokens can be found [here](https://docs.cardano.org/cardano-testnets/tools/faucet).
 
+## Agnostic Commit Tool
+
+The `/commit` page, also reachable at `/agnostic-commit` and `/agnostic`, lets you commit any message to Ethereum or Cardano without using the oath ceremony or log. Add `?devnet` to use Sepolia for Ethereum or Preview for Cardano. This page does not call the API or record anything in the database; the only permanent record is the blockchain transaction you submit.
+
 ## Style
 
 Here are some ideas for the style I want to go for.

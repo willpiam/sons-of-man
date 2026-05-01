@@ -8,7 +8,7 @@ ethTemplate.innerHTML = `
       border: 1px solid var(--som-border, rgba(245, 158, 11, 0.22));
       border-radius: 10px;
       padding: 1rem;
-      background: rgba(6, 6, 15, 0.5);
+      background: var(--wallet-surface, rgba(6, 6, 15, 0.5));
     }
 
     h2 {
@@ -46,8 +46,8 @@ ethTemplate.innerHTML = `
       margin-top: 0.85rem;
       padding: 0.65rem;
       border-radius: 8px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: var(--wallet-output-bg, rgba(255, 255, 255, 0.05));
+      border: 1px solid var(--wallet-output-border, rgba(255, 255, 255, 0.08));
       color: var(--som-text, #e5e7eb);
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       font-size: 0.88rem;

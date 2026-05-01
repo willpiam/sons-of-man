@@ -31,6 +31,16 @@ services:
     rootDir: .
     buildCommand: echo "No build step required"
     staticPublishPath: .
+    routes:
+      - type: rewrite
+        source: /commit
+        destination: /commit.html
+      - type: rewrite
+        source: /agnostic-commit
+        destination: /commit.html
+      - type: rewrite
+        source: /agnostic
+        destination: /commit.html
     headers:
       - path: /*
         name: Cache-Control
