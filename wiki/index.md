@@ -22,4 +22,4 @@ Last updated: 2026-05-01
 - [`pages/decisions/oath-wording-history.md`](pages/decisions/oath-wording-history.md) - Change history and rationale across oath candidates. (2026-05-01)
 
 ## Analyses
-- (none yet)
+- [`pages/analyses/build-command-status.md`](pages/analyses/build-command-status.md) - Current wiki evidence about build command availability and documentation gap. (2026-05-05)

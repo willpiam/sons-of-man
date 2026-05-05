@@ -17,3 +17,23 @@
   - `covanant.md`
   - `The Covanant of the Sons of Man.pdf`
 - Pending: generate source summaries and linked concept/entity pages.
+
+## [2026-05-05] query | Build command lookup
+
+- question topic: determine the project's build command from wiki content.
+- pages consulted:
+  - `wiki/index.md`
+  - `wiki/pages/sources/readme.md`
+  - `wiki/pages/overview/project-overview.md`
+- analysis page path: `wiki/pages/analyses/build-command-status.md`
+
+## [2026-05-05] query | Build command confirmed from codebase
+
+- question topic: identify and persist the actual build command.
+- pages consulted:
+  - `ReadMe.md`
+  - `web/package.json`
+  - `server/package.json`
+  - `wiki/pages/sources/readme.md`
+  - `wiki/pages/analyses/build-command-status.md`
+- analysis page path: `wiki/pages/analyses/build-command-status.md`

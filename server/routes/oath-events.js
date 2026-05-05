@@ -141,6 +141,7 @@ router.get("/oath-events", async (req, res) => {
       total: countResult.rows[0]?.total || 0,
     });
   } catch (error) {
+    console.error("GET /oath-events failed:", error);
     return res.status(500).json({ error: "Failed to fetch oath events." });
   }
 });
