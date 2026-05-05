@@ -324,46 +324,24 @@ cd "$ROOT_DIR"
 if [[ "$START_FRONTEND" == "1" ]]; then
   if port_in_use "$WEB_PORT"; then
     echo "Frontend port $WEB_PORT is already in use; reusing the existing server."
-    echo "If /commit returns 404, stop the existing server or use --web-port with a free port."
     START_FRONTEND="0"
   else
-    echo "Starting frontend server on http://localhost:$WEB_PORT ..."
-    python3 - "$WEB_PORT" <<'PY' >/dev/null 2>&1 &
-import http.server
-import socketserver
-import sys
-import urllib.parse
-
-
-ROUTE_ALIASES = {
-    "/commit": "/commit.html",
-    "/agnostic": "/commit.html",
-    "/agnostic-commit": "/commit.html",
-    "/log": "/log.html",
-    "/ceremony": "/ceremony.html",
-}
-
-
-class RouteHandler(http.server.SimpleHTTPRequestHandler):
-    def translate_path(self, path):
-        parsed = urllib.parse.urlsplit(path)
-        route = parsed.path.rstrip("/") or "/"
-        if route in ROUTE_ALIASES:
-            path = ROUTE_ALIASES[route]
-            if parsed.query:
-                path = f"{path}?{parsed.query}"
-        return super().translate_path(path)
-
-
-class ReusableTCPServer(socketserver.TCPServer):
-    allow_reuse_address = True
-
-
-port = int(sys.argv[1])
-with ReusableTCPServer(("", port), RouteHandler) as httpd:
-    httpd.serve_forever()
-PY
-    WEB_PID=$!
+    WEB_APP_DIR="$ROOT_DIR/web"
+    if [[ ! -d "$WEB_APP_DIR" ]]; then
+      echo "Missing React app at $WEB_APP_DIR"
+      START_FRONTEND="0"
+    else
+      cd "$WEB_APP_DIR"
+      if [[ ! -d node_modules ]]; then
+        echo "Installing frontend dependencies..."
+        npm install
+      fi
+      node scripts/patch-libsodium.cjs
+      echo "Starting React dev server on http://localhost:$WEB_PORT ..."
+      PORT="$WEB_PORT" BROWSER=none npm start &
+      WEB_PID=$!
+      cd "$ROOT_DIR"
+    fi
   fi
 else
   echo "Skipping frontend server."
@@ -373,9 +351,9 @@ echo
 echo "Local environment is running:"
 echo "- API:      http://localhost:$PORT/health"
 if [[ "$START_FRONTEND" == "1" ]] || port_in_use "$WEB_PORT"; then
-  echo "- Frontend: http://localhost:$WEB_PORT/index.html"
-  echo "- Commit:   http://localhost:$WEB_PORT/commit"
-  echo "- Log Page: http://localhost:$WEB_PORT/log.html"
+  echo "- Frontend: http://localhost:$WEB_PORT/"
+  echo "- Ceremony: http://localhost:$WEB_PORT/ceremony"
+  echo "- Log:      http://localhost:$WEB_PORT/log"
 fi
 echo
 echo "Press Ctrl+C to stop both servers."

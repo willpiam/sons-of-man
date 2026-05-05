@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --som-bg: #06060f;
+  --som-bg-elevated: #0d1020;
+  --som-panel: #11162a;
+  --som-text: #e5e7eb;
+  --som-text-muted: #9ca3af;
+  --som-border: rgba(245, 158, 11, 0.22);
+  --som-accent: #f59e0b;
+  --som-accent-strong: #fbbf24;
+  --som-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(251, 191, 36, 0.14), transparent 36%),
+    radial-gradient(circle at 82% 6%, rgba(251, 146, 60, 0.1), transparent 33%),
+    linear-gradient(180deg, var(--som-bg-elevated), var(--som-bg));
+  color: var(--som-text);
+}
+
+a {
+  color: var(--som-accent-strong);
+}
+
+.som-card {
+  background: var(--som-panel);
+  border: 1px solid var(--som-border);
+  border-radius: 14px;
+  padding: 1.4rem 1.3rem;
+  box-shadow: var(--som-shadow);
+}
+
+.som-btn {
+  border: 0;
+  border-radius: 10px;
+  padding: 0.62rem 0.95rem;
+  font: inherit;
+  cursor: pointer;
+  color: #06060f;
+  font-weight: 600;
+  background: var(--som-accent);
+}
+
+.som-btn:hover:not(:disabled) {
+  background: var(--som-accent-strong);
+}
+
+.som-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.som-btn-secondary {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--som-accent-strong);
+  border: 1px solid var(--som-border);
+}
+
+.som-btn-ghost {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--som-text-muted);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.som-input {
+  width: 100%;
+  padding: 0.65rem 0.7rem;
+  border-radius: 8px;
+  border: 1px solid var(--som-border);
+  background: rgba(6, 6, 15, 0.5);
+  color: var(--som-text);
+  font: inherit;
+}

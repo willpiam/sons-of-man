@@ -28,19 +28,13 @@ services:
 
   - type: static
     name: sons-of-man-web
-    rootDir: .
-    buildCommand: echo "No build step required"
-    staticPublishPath: .
+    rootDir: web
+    buildCommand: npm install && npm run build
+    staticPublishPath: build
     routes:
       - type: rewrite
-        source: /commit
-        destination: /commit.html
-      - type: rewrite
-        source: /agnostic-commit
-        destination: /commit.html
-      - type: rewrite
-        source: /agnostic
-        destination: /commit.html
+        source: /*
+        destination: /index.html
     headers:
       - path: /*
         name: Cache-Control

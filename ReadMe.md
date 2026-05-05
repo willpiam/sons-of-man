@@ -32,13 +32,15 @@ Run the server code
 
 On my system I have to run `nvm use node` before running `npm start` but this is a quirk of my system and likely won't apply to you. 
 
-### Run the GUI (webpage)
+### Run the GUI (React SPA)
 
-Start another local server and navigate to the entry point of that server. The easiest way to do this is using python.
+The frontend lives in `web/` (Create React App + CRACO). **Use a different port from the API** (the API defaults to 3000):
 
-    python3 -m http.server 8000
+    cd web
+    npm install
+    npm start
 
-In this case the hosted page can be found at `http://localhost:8000/`
+CRA defaults to port 3000; either set `PORT=8000` or use `bash run_local.sh` from the repo root, which runs the API and sets `PORT` for the React dev server (default **8000** for the web app).
 
 ## Devnet & Testing
 
@@ -46,9 +48,25 @@ Attach `?devnet` to the end of your URL to connect only to devnets. If you do no
 
 In devnet mode you will want to configure your wallet to use the testnet. Set Ethereum wallets to use the Sepolia testnet and Cardano wallets to use the Preview testnet. You will need testnet funds in order to pay for transaction costs. Free Sepolia tokens can be found [here](https://cloud.google.com/application/web3/faucet/ethereum/sepolia). Free Cardano-Preview tokens can be found [here](https://docs.cardano.org/cardano-testnets/tools/faucet).
 
-## Agnostic Commit Tool
+### How Ethereum / Sepolia mode works (implementation)
 
-The `/commit` page, also reachable at `/agnostic-commit` and `/agnostic`, lets you commit any message to Ethereum or Cardano without using the oath ceremony or log. Add `?devnet` to use Sepolia for Ethereum or Preview for Cardano. This page does not call the API or record anything in the database; the only permanent record is the blockchain transaction you submit.
+In the codebase, “Sepolia mode” is the same switch as **devnet** mode (Cardano Preview is paired with it).
+
+1. **URL → mode** — On load, the React app reads the query string. If the URL contains `devnet`, Redux `session.networkMode` is `"devnet"`; otherwise `"mainnet"`.
+
+2. **Expected chain** — For `"devnet"`, `getExpectedNetworks()` requires Ethereum chain id `0xaa36a7` (Sepolia). For `"mainnet"` it requires `0x1`. The app does not configure an RPC URL; the browser wallet (e.g. MetaMask) uses whatever RPC it already has for that network.
+
+3. **Wallet UI** — `web/src/components/EthereumWalletPanel.tsx` compares `eth_chainId` to the expected id on connect and on `chainChanged`. If they differ, it shows a network mismatch warning and keeps `connected` false until the user switches the wallet to Sepolia.
+
+4. **Transactions** — Oath signing uses `eth_sendTransaction` from the connected account to the burn address `0x000000000000000000000000000000000000dEaD`, value `0`, with the UTF-8 message hex-encoded in `data` (`web/src/functions/ethereumOath.ts`).
+
+5. **Explorer links** — When `networkMode` is `"devnet"`, Ethereum transaction links use `https://sepolia.etherscan.io/tx/...` instead of mainnet Etherscan.
+
+6. **API verification** — `server/services/verify-tx.js` maps `networkMode` `devnet` to `https://api-sepolia.etherscan.io/api` (still using `ETHERSCAN_API_KEY`) so receipt checks hit Sepolia.
+
+7. **Oath log** — When the ceremony submits an event to the API, the client sends `network_mode` from `session.networkMode` so the server knows whether to verify against Sepolia or mainnet (`web/src/pages/Ceremony.tsx`).
+
+**Summary:** `?devnet` sets devnet mode → expect Sepolia (`0xaa36a7`) → enforce that chain id before signing → same burn-address `data` transaction via the wallet → Sepolia Etherscan URLs → Sepolia Etherscan API for verification. You still need Sepolia ETH for gas; the app does not provide a faucet or custom RPC.
 
 ## Style
 

@@ -4,19 +4,19 @@ overview: Migrate the active Sons of Man frontend from vanilla web components to
 todos:
   - id: bootstrap-react
     content: Create ctools-aligned React SPA scaffold in root with router/store and routes for landing, ceremony, and log.
-    status: pending
+    status: completed
   - id: extract-lucid-evolution
     content: Port lucid-evolution wallet/tx integration from temp/ctools into main app services and replace legacy lucid-cardano path.
-    status: pending
+    status: completed
   - id: migrate-features
     content: Migrate landing+ticker, ceremony, and oath log to React components with parity behavior.
-    status: pending
+    status: completed
   - id: state-migration
     content: Replace walletState window-event model with centralized Redux slices/actions.
-    status: pending
+    status: completed
   - id: cutover-cleanup
     content: Switch entry/deploy to SPA, remove legacy commit flow and obsolete web component files, then delete temp/ after verification.
-    status: pending
+    status: completed
 isProject: false
 ---
 

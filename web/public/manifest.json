@@ -1,0 +1,9 @@
+{
+  "short_name": "Sons of Man",
+  "name": "Sons of Man Alliance",
+  "icons": [],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#06060f",
+  "background_color": "#06060f"
+}

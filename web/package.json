@@ -1,0 +1,64 @@
+{
+  "name": "sons-of-man-web",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@craco/craco": "^7.1.0",
+    "@lucid-evolution/lucid": "^0.4.21",
+    "@lucid-evolution/provider": "^0.1.91",
+    "@reduxjs/toolkit": "^2.6.1",
+    "buffer": "^6.0.3",
+    "jspdf": "^2.5.2",
+    "process": "^0.11.10",
+    "qrcode": "^1.5.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-redux": "^9.2.0",
+    "react-router": "^7.4.0",
+    "react-scripts": "5.0.1",
+    "stream-browserify": "^3.0.0",
+    "typescript": "^4.4.2",
+    "url": "^0.11.4"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@types/node": "^16.7.13",
+    "@types/qrcode": "^1.5.5",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "autoprefixer": "^10.4.21",
+    "crypto-browserify": "^3.12.1",
+    "path-browserify": "^1.0.1",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17"
+  },
+  "scripts": {
+    "postinstall": "node scripts/patch-libsodium.cjs",
+    "prestart": "node -e \"require('fs').copyFileSync('../oath.json','public/oath.json')\"",
+    "start": "craco start",
+    "build": "node -e \"require('fs').copyFileSync('../oath.json','public/oath.json')\" && CI=false craco build"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "overrides": {
+    "node-datachannel": "npm:empty-npm-package@1.0.0"
+  }
+}
